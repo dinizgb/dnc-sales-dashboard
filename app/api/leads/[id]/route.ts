@@ -6,7 +6,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   const headersList = headers();
   const authorization = headersList.get('Authorization');
   const token = authorization?.split(' ')[1] || '';
