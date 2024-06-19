@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { Pool } from 'pg';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -7,36 +6,43 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
+export async function POST(req: Request) {
+  const { email, password } = await req.json()
 
-    const client = await pool.connect();
+  const client = await pool.connect()
 
-    try {
-      const result = await client.query('SELECT id, password FROM users WHERE email = $1', [email]);
+  try {
+    const result = await client.query('SELECT id, password FROM users WHERE email = $1', [email])
 
-      if (result.rows.length === 0) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-      }
-
-      const user = result.rows[0];
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (!isPasswordValid) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-      }
-
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '2h' });
-
-      res.status(200).json({ token });
-    } catch (err) {
-      res.status(500).json({ error: 'Failed to login' });
-    } finally {
-      client.release();
+    if (result.rows.length === 0) {
+      return new Response('Invalid credentials!', {
+        status: 401,
+      })
     }
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+
+    const user = result.rows[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordValid) {
+      return new Response('Invalid credentials!', {
+        status: 401,
+      })
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '2h' })
+
+    return new Response(JSON.stringify(token), {
+      status: 200,
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+  } catch (err) {
+    return new Response('Error', {
+      status: 500,
+    })
+  } finally {
+    client.release()
   }
-};
+}
