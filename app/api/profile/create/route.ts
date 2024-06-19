@@ -13,6 +13,10 @@ export async function POST(req: Request) {
 
     const client = await pool.connect();
 
+    return new Response(name, {
+      status: 200,
+    })
+    /*
     try {
       const result = await client.query(
         'INSERT INTO users (name, email, phone, password) VALUES ($1, $2, $3, $4) RETURNING id',
@@ -31,4 +35,5 @@ export async function POST(req: Request) {
     } finally {
       client.release();
     }
+    */
 }
