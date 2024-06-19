@@ -6,9 +6,8 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'POST') {
-    const { name, email, phone, password } = req.body;
+export async function POST(req: Request) {
+  const { name, email, phone, password } = await req.json();
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -22,13 +21,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const userId = result.rows[0].id;
 
-      res.status(201).json({ userId });
+      return new Response(userId, {
+        status: 201,
+      })
     } catch (err) {
-      res.status(500).json({ error: 'Failed to create user' });
+      return new Response('Failed to create user', {
+        status: 500,
+      })
     } finally {
       client.release();
     }
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
-  }
-};
+}
