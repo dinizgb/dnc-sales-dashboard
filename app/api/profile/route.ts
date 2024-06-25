@@ -1,4 +1,4 @@
-import { headers } from 'next/headers'
+import { headers } from 'next/headers';
 import { Pool } from 'pg';
 import jwt from 'jsonwebtoken';
 
@@ -29,30 +29,21 @@ export async function GET() {
 
         if (result.rows.length === 0) {
             return new Response(JSON.stringify({ error: 'User not found' }), {
-                status: 401,
+                status: 404,
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         }
 
-        const generateYearResponse = () => {
-            const months = [
-                'Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun',
-                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
-            ];
-            
-            const yearResponse = months.map(month => ({
-                month: month,
-                value: parseFloat((Math.random() * 100000).toFixed(2))
-            }));
-            
-            return yearResponse;
+        const user = result.rows[0];
+        const userInfo = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone
         };
-
-        const yearResponse = generateYearResponse();
         
-        return new Response(JSON.stringify(yearResponse), {
+        return new Response(JSON.stringify(userInfo), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json'

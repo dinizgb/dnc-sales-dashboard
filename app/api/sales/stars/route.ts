@@ -36,23 +36,19 @@ export async function GET() {
             });
         }
 
-        const generateYearResponse = () => {
-            const months = [
-                'Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun',
-                'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
-            ];
-            
-            const yearResponse = months.map(month => ({
-                month: month,
-                value: parseFloat((Math.random() * 100000).toFixed(2))
-            }));
-            
-            return yearResponse;
-        };
+        const starsResponse = [
+            { name: 'Marina Ruiz', value: parseFloat((Math.random() * 10000).toFixed(2)) }, 
+            { name: 'João Medeiros', value: parseFloat((Math.random() * 10000).toFixed(2)) }, 
+            { name: 'Fábio Manoel', value: parseFloat((Math.random() * 10000).toFixed(2)) },
+            { name: 'Larissa Lima', value: parseFloat((Math.random() * 10000).toFixed(2)) },
+            { name: 'Ingrid Dias', value: parseFloat((Math.random() * 10000).toFixed(2)) }
+        ];
 
-        const yearResponse = generateYearResponse();
+        const sortStarsByValueDesc = (stars: any) => {
+            return stars.sort((a: any, b: any) => b.value - a.value);
+        };
         
-        return new Response(JSON.stringify(yearResponse), {
+        return new Response(JSON.stringify(sortStarsByValueDesc(starsResponse)), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json'

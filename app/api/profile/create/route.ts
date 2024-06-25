@@ -1,22 +1,22 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Pool } from 'pg';
-import bcrypt from 'bcryptjs';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+import { db } from '@vercel/postgres'
+import bcrypt from 'bcryptjs'
 
 export async function POST(req: Request) {
-  const { name, email, phone, password } = await req.json();
+    const { name, email, phone, password } = await req.json()
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (!name?.trim() || !email?.trim() || !phone?.trim() || !password?.trim()) {
+      return new Response(JSON.stringify({ error: 'All fields are required' }), {
+          status: 400,
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      })
+    }
 
-    const client = await pool.connect();
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    return new Response(name, {
-      status: 200,
-    })
-    /*
+    const client = await db.connect()
+
     try {
       const result = await client.query(
         'INSERT INTO users (name, email, phone, password) VALUES ($1, $2, $3, $4) RETURNING id',
@@ -35,5 +35,4 @@ export async function POST(req: Request) {
     } finally {
       client.release();
     }
-    */
 }

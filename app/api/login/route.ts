@@ -1,15 +1,11 @@
-import { Pool } from 'pg';
+import { db } from '@vercel/postgres'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
 
 export async function POST(req: Request) {
   const { email, password } = await req.json()
 
-  const client = await pool.connect()
+  const client = await db.connect()
 
   try {
     const result = await client.query('SELECT id, password FROM users WHERE email = $1', [email])
@@ -32,14 +28,14 @@ export async function POST(req: Request) {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '2h' })
 
-    return new Response(JSON.stringify(token), {
+    return new Response(JSON.stringify({ jwt_token: token }), {
       status: 200,
       headers: {
           'Content-Type': 'application/json'
       }
     })
-  } catch (err) {
-    return new Response('Error', {
+  } catch (e) {
+    return new Response(`${e}`, {
       status: 500,
     })
   } finally {
