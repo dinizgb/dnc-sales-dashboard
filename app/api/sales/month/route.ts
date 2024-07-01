@@ -37,13 +37,18 @@ export async function GET() {
         }
 
         const generateMonthResponse = () => {
-          const monthResponse = [];
-          for (let day = 1; day <= 30; day++) {
-              const dayString = day.toString().padStart(2, '0');
-              const value = parseFloat((Math.random() * 10000).toFixed(2));
-              monthResponse.push({ label: dayString, value: value });
-          }
-          return monthResponse;
+            const labels = [];
+            const data = [];
+            const type = 'line';
+        
+            for (let day = 1; day <= 30; day++) {
+                const dayString = day.toString().padStart(2, '0');
+                const value = parseFloat((Math.random() * 10000).toFixed(2));
+                labels.push(dayString);
+                data.push(value);
+            }
+        
+            return { labels, data, type };
         };
       
         const monthResponse = generateMonthResponse();

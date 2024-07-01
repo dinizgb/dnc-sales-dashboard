@@ -37,17 +37,14 @@ export async function GET() {
         }
 
         const generateYearResponse = () => {
-            const months = [
+            const labels = [
                 'Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun',
                 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
             ];
-            
-            const yearResponse = months.map(month => ({
-                label: month,
-                value: parseFloat((Math.random() * 100000).toFixed(2))
-            }));
-            
-            return yearResponse;
+            const data = labels.map(() => parseFloat((Math.random() * 100000).toFixed(2)));
+            const type = 'bar';
+        
+            return { labels, data, type };
         };
 
         const yearResponse = generateYearResponse();
