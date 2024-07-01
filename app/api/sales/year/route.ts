@@ -43,7 +43,7 @@ export async function GET() {
             ];
             
             const yearResponse = months.map(month => ({
-                month: month,
+                label: month,
                 value: parseFloat((Math.random() * 100000).toFixed(2))
             }));
             

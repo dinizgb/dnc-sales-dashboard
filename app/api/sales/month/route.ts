@@ -41,7 +41,7 @@ export async function GET() {
           for (let day = 1; day <= 30; day++) {
               const dayString = day.toString().padStart(2, '0');
               const value = parseFloat((Math.random() * 10000).toFixed(2));
-              monthResponse.push({ day: dayString, value: value });
+              monthResponse.push({ label: dayString, value: value });
           }
           return monthResponse;
         };
