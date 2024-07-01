@@ -1,5 +1,4 @@
 import { headers } from 'next/headers'
-import { format } from 'date-fns';
 import { Pool } from 'pg';
 import jwt from 'jsonwebtoken';
 
@@ -37,25 +36,16 @@ export async function GET() {
             });
         }
 
-        const value1 = parseFloat((Math.random() * 100000).toFixed(2))
-        const value2 = parseFloat((Math.random() * 100000).toFixed(2))
-        const getFormattedDate = () => {
-            return format(new Date(), "'Atualizado em' dd/MM/yyyy 'às' HH:mm");
-        }
-        const formatSubtitleStatus = () => {
-            if (value1 > value2) return 'success'
-            else if (value1 < value2 * 0.6) return 'alert'
-            else if (value1 < value2 * 0.99) return 'warning'
-            else return 'success'
-        } 
-
-        const highlightsResponse = [
-            { value: value1, subtitle: getFormattedDate() }, 
-            { value: value2, subtitle: formatSubtitleStatus() }, 
-            { value: 2.123, subtitle: 'Clique aqui para gerenciar seus leads' }
+        const newsResponse = [
+            { title: 'A Importância dos Asserts e Expects em Testes Automatizados', date: '13:25', link: 'https://www.escoladnc.com.br/blog/a-importancia-dos-asserts-e-expects-em-testes-automatizados/' }, 
+            { title: 'Como Criar Protótipos de Alta Fidelidade no WhatsApp', date: '12:15', link: 'https://www.escoladnc.com.br/blog/como-criar-prototipos-de-alta-fidelidade-no-whatsapp/' },
+            { title: 'Evolução do Design: Do Gradiente ao Flat Design', date: '11:31', link: 'https://www.escoladnc.com.br/blog/evolucao-do-design-do-gradiente-ao-flat-design/' },
+            { title: 'Prototipagem no Figma e Desenvolvimento Front-End: Guia Completo', date: '11:03', link: 'https://www.escoladnc.com.br/blog/prototipagem-no-figma-e-desenvolvimento-frontend-guia-completo/' },
+            { title: 'Construção de Páginas Web: Conceitos e Boas Práticas', date: '10:43', link: 'https://www.escoladnc.com.br/blog/construcao-de-paginas-web-conceitos-e-boas-praticas/' },
+            { title: 'Dominando Listas e Funções Nativas em Python', date: '10:32', link: 'https://www.escoladnc.com.br/blog/dominando-listas-e-funcoes-nativas-em-python/' },
         ];
         
-        return new Response(JSON.stringify(highlightsResponse), {
+        return new Response(JSON.stringify(newsResponse), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json'
