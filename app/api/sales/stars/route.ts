@@ -40,8 +40,7 @@ export async function GET() {
             { name: 'Marina Ruiz', value: parseFloat((Math.random() * 10000).toFixed(2)) }, 
             { name: 'João Medeiros', value: parseFloat((Math.random() * 10000).toFixed(2)) }, 
             { name: 'Fábio Manoel', value: parseFloat((Math.random() * 10000).toFixed(2)) },
-            { name: 'Larissa Lima', value: parseFloat((Math.random() * 10000).toFixed(2)) },
-            { name: 'Ingrid Dias', value: parseFloat((Math.random() * 10000).toFixed(2)) }
+            { name: 'Larissa Lima', value: parseFloat((Math.random() * 10000).toFixed(2)) }
         ];
 
         const sortStarsByValueDesc = (stars: any) => {
