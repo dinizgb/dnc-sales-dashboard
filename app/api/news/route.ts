@@ -42,7 +42,6 @@ export async function GET() {
             { title: 'Evolução do Design: Do Gradiente ao Flat Design', date: '11:31', link: 'https://www.escoladnc.com.br/blog/evolucao-do-design-do-gradiente-ao-flat-design/' },
             { title: 'Prototipagem no Figma e Desenvolvimento Front-End: Guia Completo', date: '11:03', link: 'https://www.escoladnc.com.br/blog/prototipagem-no-figma-e-desenvolvimento-frontend-guia-completo/' },
             { title: 'Construção de Páginas Web: Conceitos e Boas Práticas', date: '10:43', link: 'https://www.escoladnc.com.br/blog/construcao-de-paginas-web-conceitos-e-boas-praticas/' },
-            { title: 'Dominando Listas e Funções Nativas em Python', date: '10:32', link: 'https://www.escoladnc.com.br/blog/dominando-listas-e-funcoes-nativas-em-python/' },
         ];
         
         return new Response(JSON.stringify(newsResponse), {
