@@ -13,9 +13,9 @@ export async function POST(req: Request) {
       }
   })
   
-  const { name, email, phone, contacted } = await req.json()
+  const { name, email, phone } = await req.json()
 
-  if (!name?.trim() || !email?.trim() || !phone?.trim() || !contacted?.trim()) {
+  if (!name?.trim() || !email?.trim() || !phone?.trim()) {
     return new Response(JSON.stringify({ error: 'All fields are required' }), {
         status: 400,
         headers: {
@@ -31,8 +31,8 @@ export async function POST(req: Request) {
 
   try {
     const result = await client.query(
-      'INSERT INTO leads (user_id, name, email, phone, contacted) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [userId, name, email, phone, contacted]
+      'INSERT INTO leads (user_id, name, email, phone) VALUES ($1, $2, $3, $4) RETURNING id',
+      [userId, name, email, phone]
     );
 
     const leadId = result.rows[0].id;
