@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
     const leadId = result.rows[0].id;
 
-    return new Response(JSON.stringify({ lead_id: leadId }), {
+    return new Response(JSON.stringify({ id: leadId }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json'
