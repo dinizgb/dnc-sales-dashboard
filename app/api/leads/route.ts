@@ -25,19 +25,19 @@ export async function GET() {
     const client = await pool.connect()
 
     try {
-        const result = await client.query('SELECT * FROM leads WHERE user_id = $1', [userId])
-        Response.json(result.rows)
-        return new Response(JSON.stringify(result.rows), {
+        const result = await client.query('SELECT * FROM leads WHERE user_id = $1', [userId]);
+        const filteredResult = result.rows.map(({ user_id, contacted, ...rest }) => rest);
+        return new Response(JSON.stringify(filteredResult), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
+        });
     } catch (e) {
         return new Response(`${e}`, {
             status: 500,
-        })
+        });
     } finally {
-        client.release()
+        client.release();
     }
 }
