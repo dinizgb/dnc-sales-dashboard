@@ -1,8 +1,9 @@
 import { db } from '@vercel/postgres'
 import { headers } from 'next/headers'
+import { URL } from 'url'
 import jwt from 'jsonwebtoken'
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request) {
   const headersList = headers()
   const authorization = headersList.get('Authorization')
 
@@ -18,7 +19,8 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   const userId = decoded.userId
 
   const client = await db.connect()
-  const leadId = params.id
+  const url = new URL(req.url)
+  const leadId = url.searchParams.get('id')
 
   try {
     const leadCheckResult = await client.query('SELECT id FROM leads WHERE id = $1 AND user_id = $2', [leadId, userId]);
