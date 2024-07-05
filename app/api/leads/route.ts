@@ -25,7 +25,7 @@ export async function GET() {
     const client = await pool.connect()
 
     try {
-        const result = await client.query('SELECT * FROM leads WHERE user_id = $1', [userId]);
+        const result = await client.query('SELECT * FROM leads WHERE user_id = $1 ORDER BY id DESC', [userId]);
         const filteredResult = result.rows.map(({ user_id, contacted, ...rest }) => rest);
         return new Response(JSON.stringify(filteredResult), {
             status: 200,
