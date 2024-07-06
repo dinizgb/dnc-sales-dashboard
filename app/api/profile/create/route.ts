@@ -13,26 +13,43 @@ export async function POST(req: Request) {
       })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-
     const client = await db.connect()
 
     try {
-      const result = await client.query(
-        'INSERT INTO users (name, email, phone, password) VALUES ($1, $2, $3, $4) RETURNING id',
-        [name, email, phone, hashedPassword]
-      );
+        const emailCheckResult = await client.query(
+            'SELECT id FROM users WHERE email = $1',
+            [email]
+        );
 
-      const userId = result.rows[0].id;
+        if (emailCheckResult.rows.length > 0) {
+            return new Response(JSON.stringify({ error: 'Email is already in use' }), {
+                status: 409,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
 
-      return new Response(userId, {
-        status: 201,
-      })
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const result = await client.query(
+            'INSERT INTO users (name, email, phone, password) VALUES ($1, $2, $3, $4) RETURNING id',
+            [name, email, phone, hashedPassword]
+        );
+
+        const userId = result.rows[0].id;
+
+        return new Response(JSON.stringify({ id: userId }), {
+            status: 201,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     } catch (err) {
-      return new Response('Failed to create user', {
-        status: 500,
-      })
+        return new Response('Failed to create user', {
+            status: 500,
+        })
     } finally {
-      client.release();
+        client.release();
     }
 }

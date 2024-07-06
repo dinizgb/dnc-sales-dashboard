@@ -20,7 +20,7 @@ export async function DELETE() {
 
   try {
     await client.query('DELETE FROM users WHERE id = $1', [userId]);
-    return new Response('Lead deleted', {
+    return new Response('Profile deleted', {
       status: 200,
     })
   } catch (e) {
